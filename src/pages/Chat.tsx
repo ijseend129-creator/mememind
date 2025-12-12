@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Send, LogOut, Plus, Share2, Trash2, Brain, User } from "lucide-react";
+import { Send, LogOut, Plus, Share2, Trash2, Brain, User, Menu, X } from "lucide-react";
 import { User as SupabaseUser, Session } from "@supabase/supabase-js";
 
 interface Message {
@@ -28,6 +28,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -121,6 +122,7 @@ const Chat = () => {
     setConversations([data, ...conversations]);
     setCurrentConversation(data.id);
     setMessages([]);
+    setSidebarOpen(false);
   };
 
   const deleteConversation = async (id: string) => {
@@ -172,6 +174,11 @@ const Chat = () => {
         c.id === conversation.id ? { ...c, is_public: !c.is_public } : c
       )
     );
+  };
+
+  const selectConversation = (id: string) => {
+    setCurrentConversation(id);
+    setSidebarOpen(false);
   };
 
   const sendMessage = async (e: React.FormEvent) => {
@@ -345,11 +352,32 @@ const Chat = () => {
   if (!user) return null;
 
   return (
-    <div className="h-screen flex bg-background">
+    <div className="h-screen flex bg-background relative">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="w-64 bg-card border-r border-border flex flex-col">
-        <div className="p-4 border-b border-border">
+      <div className={`
+        fixed md:relative inset-y-0 left-0 z-50
+        w-64 bg-card border-r border-border flex flex-col
+        transform transition-transform duration-300 ease-in-out
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
+        <div className="p-4 border-b border-border flex items-center justify-between">
           <h1 className="font-display text-2xl text-gradient">MemeMind</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X className="w-5 h-5" />
+          </Button>
         </div>
 
         <div className="p-2">
@@ -372,10 +400,10 @@ const Chat = () => {
                   ? "bg-primary/20 text-foreground"
                   : "hover:bg-muted text-muted-foreground hover:text-foreground"
               }`}
-              onClick={() => setCurrentConversation(conv.id)}
+              onClick={() => selectConversation(conv.id)}
             >
               <span className="flex-1 truncate text-sm">{conv.title}</span>
-              <div className="hidden group-hover:flex gap-1">
+              <div className="flex gap-1 md:hidden md:group-hover:flex">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -414,18 +442,30 @@ const Chat = () => {
       </div>
 
       {/* Chat area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Mobile header */}
+        <div className="md:hidden flex items-center gap-3 p-3 border-b border-border bg-card/50">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
+          <h1 className="font-display text-xl text-gradient">MemeMind</h1>
+        </div>
+
         {currentConversation ? (
           <>
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-4">
               {messages.length === 0 && (
-                <div className="h-full flex flex-col items-center justify-center text-center">
-                  <Brain className="w-16 h-16 text-primary mb-4 animate-pulse-glow" />
-                  <h2 className="font-display text-3xl text-gradient mb-2">
+                <div className="h-full flex flex-col items-center justify-center text-center px-4">
+                  <Brain className="w-12 h-12 md:w-16 md:h-16 text-primary mb-4 animate-pulse-glow" />
+                  <h2 className="font-display text-2xl md:text-3xl text-gradient mb-2">
                     What's on your mind?
                   </h2>
-                  <p className="text-muted-foreground max-w-md">
+                  <p className="text-muted-foreground max-w-md text-sm md:text-base">
                     Ask me about meme lore, TikTok trends, Gen Z slang, or
                     literally anything chaotic. No cap, I'm built different. 🧠
                   </p>
@@ -435,38 +475,38 @@ const Chat = () => {
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex gap-3 ${
+                  className={`flex gap-2 md:gap-3 ${
                     message.role === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
                   {message.role === "assistant" && (
-                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                      <Brain className="w-4 h-4 text-primary" />
+                    <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <Brain className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" />
                     </div>
                   )}
                   <div
-                    className={`max-w-[70%] p-4 rounded-2xl ${
+                    className={`max-w-[85%] md:max-w-[70%] p-3 md:p-4 rounded-2xl ${
                       message.role === "user"
                         ? "bg-primary text-primary-foreground"
                         : "bg-card border border-border"
                     }`}
                   >
-                    <p className="whitespace-pre-wrap">{message.content}</p>
+                    <p className="whitespace-pre-wrap text-sm md:text-base">{message.content}</p>
                   </div>
                   {message.role === "user" && (
-                    <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                      <User className="w-4 h-4 text-secondary" />
+                    <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                      <User className="w-3.5 h-3.5 md:w-4 md:h-4 text-secondary" />
                     </div>
                   )}
                 </div>
               ))}
 
               {isLoading && messages[messages.length - 1]?.role === "user" && (
-                <div className="flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Brain className="w-4 h-4 text-primary animate-pulse" />
+                <div className="flex gap-2 md:gap-3">
+                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Brain className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary animate-pulse" />
                   </div>
-                  <div className="bg-card border border-border p-4 rounded-2xl">
+                  <div className="bg-card border border-border p-3 md:p-4 rounded-2xl">
                     <div className="flex gap-1">
                       <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
                       <span
@@ -488,14 +528,14 @@ const Chat = () => {
             {/* Input */}
             <form
               onSubmit={sendMessage}
-              className="p-4 border-t border-border bg-card/50"
+              className="p-3 md:p-4 border-t border-border bg-card/50"
             >
               <div className="flex gap-2 max-w-4xl mx-auto">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask me anything, fr fr..."
-                  className="flex-1 bg-background"
+                  className="flex-1 bg-background text-sm md:text-base"
                   disabled={isLoading}
                 />
                 <Button
@@ -509,10 +549,10 @@ const Chat = () => {
             </form>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-center px-4">
             <div className="text-center">
-              <Brain className="w-16 h-16 text-primary mx-auto mb-4" />
-              <h2 className="font-display text-2xl text-gradient mb-2">
+              <Brain className="w-12 h-12 md:w-16 md:h-16 text-primary mx-auto mb-4" />
+              <h2 className="font-display text-xl md:text-2xl text-gradient mb-2">
                 No Chat Selected
               </h2>
               <Button onClick={createNewConversation}>Start a New Chat</Button>
