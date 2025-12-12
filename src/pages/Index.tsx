@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Brain, MessageCircle, Sparkles, Zap, Share2, Users } from "lucide-react";
 
 const FloatingEmoji = ({ emoji, className }: { emoji: string; className: string }) => (
-  <span className={`absolute text-4xl md:text-6xl select-none pointer-events-none ${className}`}>
+  <span className={`absolute text-2xl sm:text-4xl md:text-6xl select-none pointer-events-none hidden sm:block ${className}`}>
     {emoji}
   </span>
 );
@@ -57,16 +57,16 @@ const Index = () => {
               <span className="text-sm text-muted-foreground">Your Daily Dose of Delulu, Rizz & Lore</span>
             </div>
             
-            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-gradient mb-6 tracking-wide">
+            <h1 className="font-display text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-gradient mb-4 md:mb-6 tracking-wide">
               MemeMind
             </h1>
             
-            <p className="text-xl md:text-2xl text-foreground/90 mb-4 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-xl md:text-2xl text-foreground/90 mb-3 md:mb-4 max-w-2xl mx-auto leading-relaxed">
               The AI chatbot that speaks fluent TikTok, knows the entire internet's lore, and drops{" "}
               <span className="text-neon-cyan font-bold">W takes</span> only.
             </p>
             
-            <p className="text-lg text-muted-foreground mb-8">
+            <p className="text-sm sm:text-lg text-muted-foreground mb-6 md:mb-8">
               Talk to MemeMind. Get smarter? Maybe. Get unhinged? <span className="text-neon-pink">For sure.</span>
             </p>
 
@@ -91,7 +91,7 @@ const Index = () => {
         {/* Trending Topics */}
         <section className="py-20 px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl text-center mb-12 text-gradient">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl text-center mb-8 md:mb-12 text-gradient">
               🔥 Trending Topics MemeMind Can Break Down
             </h2>
             
@@ -114,7 +114,7 @@ const Index = () => {
         {/* Testimonials */}
         <section className="py-20 px-4 bg-muted/30">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl text-center mb-12 text-gradient">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl text-center mb-8 md:mb-12 text-gradient">
               🗨️ What People Are Saying
             </h2>
             
@@ -135,7 +135,7 @@ const Index = () => {
         {/* Features */}
         <section className="py-20 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl text-center mb-12 text-gradient">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl text-center mb-8 md:mb-12 text-gradient">
               📱 Use MemeMind to:
             </h2>
             
@@ -156,7 +156,7 @@ const Index = () => {
         {/* CTA */}
         <section className="py-20 px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-display text-4xl md:text-5xl mb-6 text-gradient">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl mb-4 md:mb-6 text-gradient">
               👾 Wanna try?
             </h2>
             
