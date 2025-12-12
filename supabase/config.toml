@@ -1,0 +1,4 @@
+project_id = "wtkjximtcugyrbltuekp"
+
+[functions.mememind-chat]
+verify_jwt = false
