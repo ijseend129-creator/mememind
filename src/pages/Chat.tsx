@@ -451,7 +451,15 @@ const Chat = () => {
           ))}
         </div>
 
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-border space-y-1">
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-2 text-muted-foreground"
+            onClick={() => navigate("/account")}
+          >
+            <User className="w-4 h-4" />
+            Account
+          </Button>
           <Button
             variant="ghost"
             className="w-full justify-start gap-2 text-muted-foreground"
