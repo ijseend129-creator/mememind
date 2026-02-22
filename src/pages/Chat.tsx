@@ -245,10 +245,11 @@ const Chat = () => {
         throw new Error("Failed to get AI response");
       }
 
-      // Handle streaming response
+      // Handle streaming response with typewriter effect
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
       let assistantContent = "";
+      let displayedContent = "";
       let textBuffer = "";
 
       // Add placeholder assistant message
@@ -257,6 +258,30 @@ const Chat = () => {
         ...prev,
         { id: tempAssistantId, role: "assistant", content: "" },
       ]);
+
+      // Typewriter: reveal characters gradually
+      let typewriterRunning = true;
+      const CHAR_DELAY = 15; // ms per character
+
+      const runTypewriter = async () => {
+        while (typewriterRunning || displayedContent.length < assistantContent.length) {
+          if (displayedContent.length < assistantContent.length) {
+            // Reveal a few chars at a time for smoother feel
+            const charsToAdd = Math.min(3, assistantContent.length - displayedContent.length);
+            displayedContent = assistantContent.slice(0, displayedContent.length + charsToAdd);
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === tempAssistantId
+                  ? { ...m, content: displayedContent }
+                  : m
+              )
+            );
+          }
+          await new Promise((r) => setTimeout(r, CHAR_DELAY));
+        }
+      };
+
+      const typewriterPromise = runTypewriter();
 
       while (reader) {
         const { done, value } = await reader.read();
@@ -281,13 +306,6 @@ const Chat = () => {
             const content = parsed.choices?.[0]?.delta?.content;
             if (content) {
               assistantContent += content;
-              setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === tempAssistantId
-                    ? { ...m, content: assistantContent }
-                    : m
-                )
-              );
             }
           } catch {
             textBuffer = line + "\n" + textBuffer;
@@ -295,6 +313,9 @@ const Chat = () => {
           }
         }
       }
+
+      typewriterRunning = false;
+      await typewriterPromise;
 
       // Save assistant message to DB
       if (assistantContent) {
