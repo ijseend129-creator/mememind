@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Send, LogOut, Plus, Share2, Trash2, Brain, User, Menu, X } from "lucide-react";
+import { Send, LogOut, Plus, Share2, Trash2, User, Menu, X } from "lucide-react";
+import logoImage from "@/assets/logo.png";
 import { User as SupabaseUser, Session } from "@supabase/supabase-js";
 
 interface Message {
@@ -461,7 +462,7 @@ const Chat = () => {
             <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-4">
               {messages.length === 0 && (
                 <div className="h-full flex flex-col items-center justify-center text-center px-4">
-                  <Brain className="w-12 h-12 md:w-16 md:h-16 text-primary mb-4 animate-pulse-glow" />
+                  <img src={logoImage} alt="MemeMind" className="w-16 h-16 md:w-24 md:h-24 mb-4 animate-pulse-glow" />
                   <h2 className="font-display text-2xl md:text-3xl text-gradient mb-2">
                     What's on your mind?
                   </h2>
@@ -480,9 +481,7 @@ const Chat = () => {
                   }`}
                 >
                   {message.role === "assistant" && (
-                    <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                      <Brain className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" />
-                    </div>
+                    <img src={logoImage} alt="MemeMind" className="w-7 h-7 md:w-8 md:h-8 rounded-full flex-shrink-0" />
                   )}
                   <div
                     className={`max-w-[85%] md:max-w-[70%] p-3 md:p-4 rounded-2xl ${
@@ -503,9 +502,7 @@ const Chat = () => {
 
               {isLoading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-2 md:gap-3">
-                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Brain className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary animate-pulse" />
-                  </div>
+                  <img src={logoImage} alt="MemeMind" className="w-7 h-7 md:w-8 md:h-8 rounded-full animate-pulse" />
                   <div className="bg-card border border-border p-3 md:p-4 rounded-2xl">
                     <div className="flex gap-1">
                       <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
@@ -551,7 +548,7 @@ const Chat = () => {
         ) : (
           <div className="flex-1 flex items-center justify-center px-4">
             <div className="text-center">
-              <Brain className="w-12 h-12 md:w-16 md:h-16 text-primary mx-auto mb-4" />
+              <img src={logoImage} alt="MemeMind" className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4" />
               <h2 className="font-display text-xl md:text-2xl text-gradient mb-2">
                 No Chat Selected
               </h2>

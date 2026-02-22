@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import logoImage from "@/assets/logo.png";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -96,9 +97,7 @@ const Auth = () => {
         <div className="bg-card/80 backdrop-blur-xl border border-border rounded-2xl p-8 shadow-2xl">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-4">
-              <Brain className="w-8 h-8 text-primary" />
-            </div>
+            <img src={logoImage} alt="MemeMind Logo" className="w-20 h-20 mx-auto mb-4" />
             <h1 className="font-display text-4xl text-gradient mb-2">MemeMind</h1>
             <p className="text-muted-foreground">
               {isLogin ? "Welcome back to the chaos" : "Join the chaos"}

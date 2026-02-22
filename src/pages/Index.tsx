@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Brain, MessageCircle, Sparkles, Zap, Share2, Users } from "lucide-react";
-import skullImage from "@/assets/skull.png";
+import logoImage from "@/assets/logo.png";
 
 const FloatingEmoji = ({ emoji, className }: { emoji: string; className: string }) => (
   <span className={`absolute text-2xl sm:text-4xl md:text-6xl select-none pointer-events-none hidden sm:block ${className}`}>
@@ -46,7 +46,7 @@ const Index = () => {
       
       {/* Floating emojis */}
       <FloatingEmoji emoji="🧠" className="top-20 left-[10%] animate-float" />
-      <FloatingImage src={skullImage} className="top-40 right-[15%] animate-float-delayed" />
+      <FloatingImage src={logoImage} className="top-40 right-[15%] animate-float-delayed" />
       <FloatingEmoji emoji="🔥" className="top-[60%] left-[5%] animate-bounce-slow" />
       <FloatingEmoji emoji="✨" className="top-[30%] right-[8%] animate-pulse-glow" />
       <FloatingEmoji emoji="🗿" className="bottom-40 left-[20%] animate-float" />
